@@ -29,3 +29,4 @@ jobs:
       # - run: gcloud info
       - run: docker run --rm -v "$GITHUB_WORKSPACE":/usr/src/project -w /usr/src/project adamhealy/pdflatex:latest pdflatex resume.tex
       - run: gsutil cp resume.pdf gs://resume-bucket-za/resume/resume.pdf
+      - run: gsutil acl ch -u AllUsers:R gs://resume-bucket-za/resume/resume.pdf
