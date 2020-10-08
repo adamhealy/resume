@@ -27,5 +27,5 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
       # - run: gcloud info
-      - run: docker run --rm -v "$GITHUB_WORKSPACE":/usr/src/project -w /usr/src/project adamhealy/pdflatex:latest pdflatex resume.tex
-      - run: ls -la
+      - run: docker run --rm -v "$GITHUB_WORKSPACE":/usr/src/project -w /usr/src/project adamhealy/pdflatex:latest pdflatex $GITHUB_WORKSPACE/resume.tex
+      - run: gsutil cp $GITHUB_WORKSPACE/resume.pdf gs://resume-bucket-za/resume/resume.pdf
