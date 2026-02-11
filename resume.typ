@@ -25,7 +25,7 @@
   title: "Data Engineer II",
   location: "Amsterdam, NL",
   company: "Booking.com",
-  dates: dates-helper(start-date: "April 2022", end-date: "Present"),
+  dates: dates-helper(start-date: "April 2022", end-date: "February 2026"),
 )
 - Building out the snowflake platform for end users (Data Engineers and Data Analysts) to create data products in a governed way.
 
