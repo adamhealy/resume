@@ -14,6 +14,7 @@
   github: github,
   linkedin: linkedin,
   personal-site: personal-site,
+  font-size: 10pt,
 )
 
 
@@ -64,7 +65,7 @@
   company: "2U, Short Course",
   dates: dates-helper(start-date: "June 2017", end-date: "June 2018"),
 )
-- Building and maintaining custom internal dashboard, a basic php site directly conencted to our MySQL database
+- Building and maintaining custom internal dashboard, a basic php site directly connected to our MySQL database
 - Enhancing and maintaining ETL scripts, written in R, deployed to AWS EC2, scheduled via crontab
 
 #work(
@@ -98,9 +99,6 @@
 - The degree was awarded with honours
 
 
-// add section on talks (snowflake conference)
-
-
 == Skills
-- *Languages*: SQL, Python, Java, R, go
+- *Languages*: SQL, Python, Java, R, Go
 - *Technologies*: Snowflake, BigQuery, dbt, Airflow, Kubernetes, Kafka
