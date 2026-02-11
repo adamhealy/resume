@@ -1,7 +1,9 @@
-// copied from https://github.com/stuxf/basic-typst-resume-template/ @ v0.1.4
+// Based on https://github.com/stuxf/basic-typst-resume-template/ @ v0.2.9
 
 #let resume(
   author: "",
+  author-position: left,
+  personal-info-position: left,
   pronouns: "",
   location: "",
   email: "",
@@ -11,6 +13,10 @@
   personal-site: "",
   accent-color: "#26428b",
   font: "Helvetica",
+  paper: "a4",
+  author-font-size: 20pt,
+  font-size: 12pt,
+  lang: "en",
   body,
 ) = {
 
@@ -19,20 +25,18 @@
 
   // Document-wide formatting, including font and margins
   set text(
-    // LaTeX style font
     font: font,
-    size: 12pt,
-    lang: "en",
+    size: font-size,
+    lang: lang,
     // Disable ligatures so ATS systems do not get confused when parsing fonts.
     ligatures: false
   )
 
-  // Reccomended to have 0.5in margin on all sides
+  // Recommended to have 0.5in margin on all sides
   set page(
     margin: (1.5cm),
-    "a4",
+    paper: paper,
   )
-
 
   // Link styles
   show link: underline
@@ -55,46 +59,44 @@
 
   // Name will be aligned left, bold and big
   show heading.where(level: 1): it => [
-    #set align(left)
+    #set align(author-position)
     #set text(
       weight: 700,
-      size: 20pt,
+      size: author-font-size,
     )
-    #it.body
+    #pad(it.body)
   ]
 
   // Level 1 Heading
   [= #(author)]
 
+  // Personal Info Helper
+  let contact-item(value, prefix: "", link-type: "") = {
+    if value != "" {
+      if link-type != "" {
+        link(link-type + value)[#(prefix + value)]
+      } else {
+        value
+      }
+    }
+  }
+
   // Personal Info
   pad(
     top: 0.25em,
-    align(left)[
-      #(
-        (
-          if pronouns != "" {
-            pronouns
-          },
-          if phone != "" {
-            phone
-          },
-          if location != "" {
-            location
-          },
-          if email != "" {
-            link("mailto:" + email)[#email]
-          },
-          if github != "" {
-            link("https://" + github)[#github]
-          },
-          if linkedin != "" {
-            link("https://" + linkedin)[#linkedin]
-          },
-          if personal-site != "" {
-            link("https://" + personal-site)[#personal-site]
-          },
-        ).filter(x => x != none).join("  |  ")
-      )
+    align(personal-info-position)[
+      #{
+        let items = (
+          contact-item(pronouns),
+          contact-item(phone),
+          contact-item(location),
+          contact-item(email, link-type: "mailto:"),
+          contact-item(github, link-type: "https://"),
+          contact-item(linkedin, link-type: "https://"),
+          contact-item(personal-site, link-type: "https://"),
+        )
+        items.filter(x => x != none).join("  |  ")
+      }
     ],
   )
 
@@ -111,7 +113,7 @@
   bottom-left: "",
   bottom-right: "",
 ) = {
-  pad[
+  [
     #top-left #h(1fr) #top-right \
     #bottom-left #h(1fr) #bottom-right
   ]
@@ -122,12 +124,12 @@
   left: "",
   right: "",
 ) = {
-  pad[
+  [
     #left #h(1fr) #right
   ]
 }
 
-// Cannot just use normal --- ligature becuase ligatures are disabled for good reasons
+// Cannot just use normal --- ligature because ligatures are disabled for good reasons
 #let dates-helper(
   start-date: "",
   end-date: "",
@@ -142,13 +144,24 @@
   degree: "",
   gpa: "",
   location: "",
+  // Makes dates on upper right like rest of components
+  consistent: false,
 ) = {
-  generic-two-by-two(
-    top-left: strong(institution),
-    top-right: location,
-    bottom-left: emph(degree),
-    bottom-right: emph(dates),
-  )
+  if consistent {
+    generic-two-by-two(
+      top-left: strong(institution),
+      top-right: dates,
+      bottom-left: emph(degree),
+      bottom-right: emph(location),
+    )
+  } else {
+    generic-two-by-two(
+      top-left: strong(institution),
+      top-right: location,
+      bottom-left: emph(degree),
+      bottom-right: emph(dates),
+    )
+  }
 }
 
 #let work(
@@ -171,13 +184,22 @@
   url: "",
   dates: "",
 ) = {
-  pad[
-    *#role*, #name
-    #if url != "" {
-      [ (#link("https://" + url)[#url])]
-    }
-    #h(1fr) #dates
-  ]
+  generic-one-by-two(
+    left: {
+      if role == "" {
+        [*#name* #if url != "" and dates != "" [ (#link("https://" + url)[#url])]]
+      } else {
+        [*#role*, #name #if url != "" and dates != ""  [ (#link("https://" + url)[#url])]]
+      }
+    },
+    right: {
+      if dates == "" and url != "" {
+        link("https://" + url)[#url]
+      } else {
+        dates
+      }
+    },
+  )
 }
 
 #let certificates(
@@ -186,7 +208,7 @@
   url: "",
   date: "",
 ) = {
-  pad[
+  [
     *#name*, #issuer
     #if url != "" {
       [ (#link("https://" + url)[#url])]
