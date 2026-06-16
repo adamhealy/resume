@@ -21,6 +21,8 @@ jobs:
 
       - name: Setup Typst
         uses: typst-community/setup-typst@v4
+        with:
+          version: "0.15.0"
 
       - name: Compile resume
         run: typst compile resume.typ output/resume.pdf
